@@ -1,3 +1,3 @@
-require("rohit.core.options")
+require("rohit.core")
 require("rohit.lazy")
 
