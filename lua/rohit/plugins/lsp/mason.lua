@@ -3,6 +3,7 @@ return {
   dependencies = {
     "williamboman/mason-lspconfig.nvim",
     "WhoIsSethDaniel/mason-tool-installer.nvim",
+    "neovim/nvim-lspconfig", -- ensure lspconfig is loaded first
   },
   config = function()
     -- import mason
@@ -36,6 +37,8 @@ return {
         "prismals",
         "pyright",
       },
+      -- auto-install configured servers (with lspconfig)
+      automatic_installation = true,
     })
 
     mason_tool_installer.setup({

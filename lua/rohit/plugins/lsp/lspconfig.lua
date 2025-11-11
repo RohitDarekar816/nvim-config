@@ -3,17 +3,13 @@ return {
   event = { "BufReadPre", "BufNewFile" },
   dependencies = {
     "hrsh7th/cmp-nvim-lsp",
-    "williamboman/mason.nvim",
-    "williamboman/mason-lspconfig.nvim",
     { "antosha417/nvim-lsp-file-operations", config = true },
     { "folke/neodev.nvim", opts = {} },
+    "williamboman/mason.nvim", -- ensure mason loads first
   },
   config = function()
     -- import lspconfig plugin
     local lspconfig = require("lspconfig")
-
-    -- import mason plugin
-    local mason = require("mason")
 
     -- import mason_lspconfig plugin
     local mason_lspconfig = require("mason-lspconfig")
@@ -83,34 +79,6 @@ return {
       vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
     end
 
-    -- setup mason first
-    mason.setup({
-      ui = {
-        icons = {
-          package_installed = "✓",
-          package_pending = "➜",
-          package_uninstalled = "✗",
-        },
-      },
-    })
-
-    -- configure mason-lspconfig
-    mason_lspconfig.setup({
-      -- list of servers for mason to install
-      ensure_installed = {
-        "ts_ls",
-        "html",
-        "cssls",
-        "tailwindcss",
-        "svelte",
-        "lua_ls",
-        "graphql",
-        "emmet_ls",
-        "prismals",
-        "pyright",
-      },
-    })
-
     -- configure individual language servers
     -- typescript/javascript
     lspconfig.ts_ls.setup({
@@ -139,7 +107,6 @@ return {
         vim.api.nvim_create_autocmd("BufWritePost", {
           pattern = { "*.js", "*.ts" },
           callback = function(ctx)
-            -- Here use ctx.match instead of ctx.file
             client.notify("$/onDidChangeTsOrJsFile", { uri = ctx.match })
           end,
         })
@@ -183,5 +150,6 @@ return {
     lspconfig.pyright.setup({
       capabilities = capabilities,
     })
+
   end,
 }
